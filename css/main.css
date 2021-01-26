@@ -42,6 +42,13 @@ a {
   border-bottom: 1px solid #ddd;
 }
 
+.local-nav-sticky .local-nav {
+  position: fixed;
+  top: 0;
+  background: rgb(255, 255, 255, 0.1);
+  backdrop-filter: saturate(180%) blur(15px);
+}
+
 .global-nav-links,
 .local-nav-links {
   display: flex;
@@ -124,7 +131,7 @@ a {
   color: rgb(29, 29, 31);
 }
 
-.desc-message {
+.sticky-elem.desc-message {
   width: 50%;
   font-weight: bold;
   opacity: 0;
@@ -160,7 +167,7 @@ a {
 
 .canvas-caption {
   max-width: 1000px;
-  margin: 0 auto;
+  margin: -8em auto 0;
   padding: 0 1rem;
   font-size: 1.2rem;
   color: #888;
@@ -230,6 +237,7 @@ JS로 해당 되는 곳에 가면 body에 아래와 같이 ID를 입력할 계�
     font-size: 4vw;
   }
   .description {
+    padding: 0;
     font-size: 2rem;
   }
   .description strong {
@@ -253,9 +261,12 @@ JS로 해당 되는 곳에 가면 body에 아래와 같이 ID를 입력할 계�
     left: 55%;
   }
   .mid-message {
+    width: 1000px;
+    padding: 0;
     font-size: 4vw;
   }
   .canvas-caption {
+    padding: 0;
     font-size: 2rem;
   }
 }
