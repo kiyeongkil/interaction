@@ -21,6 +21,10 @@ a {
   text-decoration: none;
 }
 
+body.before-load {
+  overflow: hidden;
+}
+
 .global-nav {
   position: absolute;
   top: 0;
@@ -205,6 +209,7 @@ JS로 해당 되는 곳에 가면 body에 아래와 같이 ID를 입력할 계�
 #show-scene-2 #scroll-section-2 .sticky-elem,
 #show-scene-3 #scroll-section-3 .sticky-elem {
   display: block;
+  will-change: transform, opacity;
 }
 
 .sticky-elem-canvas {
