@@ -123,6 +123,7 @@ body.before-load {
 .description {
   max-width: 1000px;
   margin: 0 auto;
+  padding: 0 1rem;
   font-size: 1.2rem;
   color: #888;
 }
@@ -136,7 +137,7 @@ body.before-load {
 }
 
 .sticky-elem.desc-message {
-  width: 50%;
+  width: 45%;
   font-weight: bold;
   opacity: 0;
 }
@@ -324,6 +325,7 @@ JS로 해당 되는 곳에 가면 body에 아래와 같이 ID를 입력할 계�
     font-size: 4vw;
   }
   .canvas-caption {
+    margin-top: -8rem;
     padding: 0;
     font-size: 2rem;
   }
