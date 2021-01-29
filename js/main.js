@@ -467,27 +467,37 @@
 			prevScrollHeight += sceneInfo[i].scrollHeight;
 		}
 
+		if (delayedYOffset < prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+			document.body.classList.remove('scroll-effect-end');
+		}
+
 		if (delayedYOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
 			enterNewScene = true;
-			currentScene++;
+			if (currentScene === sceneInfo.length - 1) {
+				document.body.classList.add('scroll-effect-end');
+			}
+			if (currentScene < sceneInfo.length - 1) {
+				currentScene++;
+			}
 			document.body.setAttribute('id', `show-scene-${currentScene}`);
 		}
 
 		if (delayedYOffset < prevScrollHeight) {
 			enterNewScene = true;
-			if (currentScene == 0) return;
+			// 브라우저 바운스 효과로 인해 마이너스가 되는 것을 방지(모바일)
+			if (currentScene === 0) return;
 			currentScene--;
 			document.body.setAttribute('id', `show-scene-${currentScene}`);
 		}
 
-		if(enterNewScene) return;
-		
+		if (enterNewScene) return;
+
 		playAnimation();
 	}
 
 	function loop() {
 		delayedYOffset = delayedYOffset + (yOffset - delayedYOffset) * acc;
-		
+
 		if (!enterNewScene) {
 			if (currentScene === 0 || currentScene === 2) {
 				const currentYOffset = delayedYOffset - prevScrollHeight;
@@ -499,6 +509,19 @@
 				}
 			}
 		}
+
+        // 일부 기기에서 페이지 끝으로 고속 이동하면 body id가 제대로 인식 안되는 경우를 해결
+        // 페이지 맨 위로 갈 경우: scrollLoop와 첫 scene의 기본 캔버스 그리기 수행
+        if (delayedYOffset < 1) {
+            scrollLoop();
+            sceneInfo[0].objs.canvas.style.opacity = 1;
+            sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0);
+        }
+        // 페이지 맨 아래로 갈 경우: 마지막 섹션은 스크롤 계산으로 위치 및 크기를 결정해야할 요소들이 많아서 1픽셀을 움직여주는 것으로 해결
+        if ((document.body.offsetHeight - window.innerHeight) - delayedYOffset < 1) {
+            let tempYOffset = yOffset;
+            scrollTo(0, tempYOffset - 1);
+        }
 
 		rafId = requestAnimationFrame(loop);
 
@@ -513,6 +536,20 @@
 		setLayout();
 		sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0);
 
+		let tempYOffset = yOffset;
+		let tempScrollCount = 0;
+		if (yOffset > 0) {
+			let siId = setInterval(() => {
+				window.scrollTo(0, tempYOffset);
+				tempYOffset += 5;
+
+				if (tempScrollCount > 20) {
+					clearInterval(siId);
+				}
+				tempScrollCount++;
+			}, 20);
+		}
+
 		window.addEventListener('scroll', () => {
 			yOffset = window.pageYOffset;
 			scrollLoop();
@@ -526,14 +563,18 @@
 
 		window.addEventListener('resize', () => {
 			if (window.innerWidth > 900) {
-				setLayout();
+				window.location.reload();
 			}
-			sceneInfo[3].values.rectStartY = 0;
 		});
 
-		window.addEventListener('orientationchange', setLayout);
+		window.addEventListener('orientationchange', () => {
+			scrollTo(0, 0);
+			setTimeout(() => {
+				window.location.reload();
+			}, 500);
+		});
 
-		document.querySelector('.loading').addEventListener('transitionend', (e)=>{
+		document.querySelector('.loading').addEventListener('transitionend', (e) => {
 			document.body.removeChild(e.currentTarget);
 		});
 	});
