@@ -220,6 +220,10 @@ JS로 해당 되는 곳에 가면 body에 아래와 같이 ID를 입력할 계�
   will-change: transform, opacity;
 }
 
+.scroll-effect-end .sticky-elem {
+  display: none !important;
+}
+
 .sticky-elem-canvas {
   top: 0;
   height: 100%;
@@ -265,6 +269,10 @@ JS로 해당 되는 곳에 가면 body에 아래와 같이 ID를 입력할 계�
 
 .before-load .loading {
   opacity: 1;
+}
+
+.normal-content {
+  margin-bottom: 10rem;
 }
 
 @keyframes loading-spin {
